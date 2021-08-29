@@ -1,6 +1,6 @@
 # weibo-demo 基于 Spring 框架实现的 weibo demo
 ### 技术栈：Nginx + Tomcat + Spring + Mybatis + FreeMarker + Redis + Mysql
-### 网站链接：https://bbs.auraxc.com/index
+### 网站链接：https://weibo.auraxc.com/index
 ### 实现功能：
 - 用户注册登录、留言板功能、用户权限设置、Timeline 时间线功能、个人信息管理、微博发布、编辑、评论功能，TODO 列表功能
 - 使用 gradle 进行包管理、SpringBoot 自动配置、SpringMVC 解析请求返回响应、Tomcat 作为应用服务器
