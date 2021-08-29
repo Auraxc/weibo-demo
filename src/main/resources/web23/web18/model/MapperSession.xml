@@ -1,0 +1,13 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 和 java mapper 的类名一样，从包名开始打，有自动补全-->
+<mapper namespace="web23.web18.model.MapperAuth">
+    <select id="userFromUsername" resultType="web23.web18.model.User">
+        SELECT * FROM user WHERE username = #{username}
+    </select>
+
+    <insert id="register">
+        INSERT INTO user (username, password, user_role, salt) VALUES (#{username},#{password},#{user_role},#{salt})
+    </insert>
+</mapper>

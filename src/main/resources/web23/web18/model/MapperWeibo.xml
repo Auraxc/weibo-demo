@@ -1,0 +1,85 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 和 java mapper 的类名一样，从包名开始打，有自动补全-->
+<mapper namespace="web23.web18.model.MapperWeibo">
+    <resultMap id="timelineWeibosResultMap" type="web23.web18.model.WeiboWithComments">
+        <id property="id" column="weibo_id"/>
+        <result property="content" column="weibo_content"/>
+        <result property="userId" column="weibo_user_id"/>
+        <collection property="comments" ofType="web23.web18.model.Comment" >
+            <id property="id" column="comment_id" javaType="Integer"/>
+            <result property="content" column="comment_content"/>
+            <result property="userId" column="comment_user_id"/>
+            <result property="weiboId" column="comment_weibo_id"/>
+        </collection>
+    </resultMap>
+
+
+    <select id="timelineWeibos" resultMap="timelineWeibosResultMap">
+        SELECT
+                weibo.id as weibo_id,
+                weibo.content as weibo_content,
+                weibo.userId as weibo_user_id,
+                IFNULL(comment.id, -1) as comment_id,
+                comment.content as comment_content,
+                comment.weiboId as comment_weibo_id,
+                comment.userId as comment_user_id
+        FROM weibo
+                     LEFT JOIN comment ON comment.weiboId = weibo.id
+        WHERE weibo.userId = #{userId}
+    </select>
+
+    <select id="commentsFromWeibo" resultType="web23.web18.model.Comment">
+        SELECT *
+        FROM comment
+        WHERE weiboId = #{weiboId}
+    </select>
+
+    <resultMap id="currentUserWeibosWithCommentsResultMap" type="web23.web18.model.WeiboWithComments">
+        <id property="id" column="weibo_id"/>
+        <result property="content" column="weibo_content"/>
+        <result property="userId" column="weibo_user_id"/>
+        <collection property="comments" ofType="web23.web18.model.Comment" >
+            <id property="id" column="comment_id" javaType="Integer"/>
+            <result property="content" column="comment_content"/>
+            <result property="userId" column="comment_user_id"/>
+            <result property="weiboId" column="comment_weibo_id"/>
+        </collection>
+    </resultMap>
+
+    <select id="currentUserWeibosWithComments" resultMap="currentUserWeibosWithCommentsResultMap">
+        SELECT
+                weibo.id as weibo_id,
+                weibo.content as weibo_content,
+                weibo.userId as weibo_user_id,
+                IFNULL(comment.id, -1) as comment_id,
+                comment.content as comment_content,
+                comment.weiboId as comment_weibo_id,
+                comment.userId as comment_user_id
+        FROM weibo
+        LEFT JOIN comment ON comment.weiboId = weibo.id
+        LEFT JOIN follow ON follow.followeeId = weibo.userId
+        WHERE weibo.userId = #{userId}
+    </select>
+
+    <insert id="add">
+        INSERT INTO weibo (content, userId) VALUES (#{content}, #{userId})
+    </insert>
+
+    <insert id="commentAdd">
+        INSERT INTO comment (content, userId, weiboId) VALUES (#{content}, #{userId}, #{weiboId})
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM weibo WHERE id = #{id}
+    </delete>
+
+    <update id="update">
+        UPDATE todo SET content = #{content} WHERE id = #{id}
+    </update>
+
+    <insert id="addFollow">
+        INSERT INTO follow (followerId, followeeId) VALUES (#{followerId}, #{followeeId})
+    </insert>
+</mapper>

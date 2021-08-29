@@ -1,0 +1,25 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 和 java mapper 的类名一样，从包名开始打，有自动补全-->
+<mapper namespace="web23.web18.model.MapperTodo">
+    <select id="currentUserTodo" resultType="web23.web18.model.Todo">
+        SELECT * FROM todo WHERE id = #{todoId} AND userId = #{currentUserId}
+    </select>
+
+    <select id="currentUserTodos" resultType="web23.web18.model.Todo">
+        SELECT * FROM todo WHERE userId = #{currentUserId}
+    </select>
+
+    <insert id="add">
+        INSERT INTO todo (content, userId) VALUES (#{content}, #{userId})
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM todo WHERE id = #{id}
+    </delete>
+
+    <update id="update">
+        UPDATE todo SET content = #{content} WHERE id = #{id}
+    </update>
+</mapper>
